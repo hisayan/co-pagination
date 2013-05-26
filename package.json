@@ -5,7 +5,7 @@
   },
   "name": "co-pagination",
   "description": "Pagination plugin for CompoundJS MVC framework",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": {
     "url": ""
   },
