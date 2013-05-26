@@ -28,34 +28,38 @@ exports.init = function (compound) {
 
 // global view helper
 function paginateHelper(collection,step) {
-    if (!step) step = 5;
+    if (!step) step = 2;
     if (!collection.totalPages || collection.totalPages < 2) return '';
     var page = parseInt(collection.currentPage, 10);
     var pages = collection.totalPages;
     var html = '<div class="pagination">';
-    var prevClass = 'prev' + (page === 1 ? ' disabled': '');
-    var nextClass = 'next' + (page === pages ? ' disabled': '');
-    html += '<ul><li class="' + prevClass + '">';
-    html += this.link_to('&larr; First', '?page=1');
-    html += this.link_to('&larr; Previous', '?page=' + (page - 1));
-    html += '</li>';
 
-    var start = ( page <= step ) ? 1 : page-step;
-    var end   = page+step;
-
-    if ( page > pages-step )
-    {
-        start = pages-(step*2);
+    html += '<ul>';
+    if (page === 1) {
+        html += '<li class="disabled"><a href="#">&laquo;</a></li>';
+        html += '<li class="disabled"><a href="#">&lsaquo;</a></li>';
+    } else {
+        html += '<li class="">' + this.link_to('&laquo;', '?page=1') + '</li>';
+        html += '<li class="">' + this.link_to('&lsaquo;', '?page=' + (page - 1)) + '</li>';
     }
 
-    if ( end < (step*2) )
-    {
-        end = step*2;
-    }
+    var start = page - step;
+    var end = page + step;
 
-    if ( end > pages )
-    {
-        end = pages;
+    console.log((step * 2 + 1), collection.totalPages, (step * 2 + 1) <= collection.totalPages);
+    if ((step * 2 + 1) >= collection.totalPages) {
+        start = 1;
+        end = collection.totalPages;
+    } else {
+        console.log(start,end);
+        if (start < 1) {
+            end += (1 - start);
+            start = 1;
+        }
+        if (end > collection.totalPages) {
+            start -= (end - collection.totalPages);
+            end = collection.totalPages;
+        }
     }
 
     for (var i = start; i <= end; i++ ) {
@@ -65,10 +69,16 @@ function paginateHelper(collection,step) {
             html += '<li>' + this.link_to(i, '?page=' + i) + '</li>';
         }
     }
-    html += '<li class="' + nextClass + '">';
-    html += this.link_to('Next &rarr;', '?page=' + (page + 1));
-    html += this.link_to('Last &rarr;', '?page=' + pages);
-    html += '</li></ul></div>';
+
+    if (page === pages) {
+        html += '<li class="disabled"><a href="#">&rsaquo;</a></li>';
+        html += '<li class="disabled"><a href="#">&raquo;</a></li>';
+    } else {
+        html += '<li class="">' + this.link_to('&rsaquo;', '?page=' + (page + 1)) + '</li>';
+        html += '<li class="">' + this.link_to('&raquo;', '?page=' + pages) + '</li>';
+    }
+
+    html += '</ul></div>';
     return html;
 };
 
