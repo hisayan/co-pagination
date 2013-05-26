@@ -36,8 +36,8 @@ function paginateHelper(collection,step) {
 
     html += '<ul>';
     if (page === 1) {
-        html += '<li class="disabled"><a href="#">&laquo;</a></li>';
-        html += '<li class="disabled"><a href="#">&lsaquo;</a></li>';
+        html += '<li class="disabled"><span>&laquo;</span></li>';
+        html += '<li class="disabled"><span>&lsaquo;</span></li>';
     } else {
         html += '<li class="">' + this.link_to('&laquo;', '?page=1') + '</li>';
         html += '<li class="">' + this.link_to('&lsaquo;', '?page=' + (page - 1)) + '</li>';
@@ -64,15 +64,15 @@ function paginateHelper(collection,step) {
 
     for (var i = start; i <= end; i++ ) {
         if (i == page) {
-            html += '<li class="active"><a href="#">' + i + '</a></li>';
+            html += '<li class="active"><span>' + i + '</span></li>';
         } else {
             html += '<li>' + this.link_to(i, '?page=' + i) + '</li>';
         }
     }
 
     if (page === pages) {
-        html += '<li class="disabled"><a href="#">&rsaquo;</a></li>';
-        html += '<li class="disabled"><a href="#">&raquo;</a></li>';
+        html += '<li class="disabled"><span>&rsaquo;</span></li>';
+        html += '<li class="disabled"><span>&raquo;</span></li>';
     } else {
         html += '<li class="">' + this.link_to('&rsaquo;', '?page=' + (page + 1)) + '</li>';
         html += '<li class="">' + this.link_to('&raquo;', '?page=' + pages) + '</li>';
