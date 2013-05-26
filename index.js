@@ -82,7 +82,7 @@ function paginateCollection(opts, callback) {
     var Model = this;
 
     if (where != null) {
-        Model.count({where: where}, function (err, totalRecords) {
+        Model.count(where, function (err, totalRecords) {
             Model.all({limit: limit, offset: (page - 1) * limit, order: order, where: where, include: include}, function (err, records) {
                 if (err) return callback(err);
                 records.totalRecords = totalRecords;
