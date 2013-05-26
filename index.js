@@ -27,8 +27,14 @@ exports.init = function (compound) {
 };
 
 // global view helper
-function paginateHelper(collection,step) {
-    if (!step) step = 2;
+function paginateHelper(collection, step, query) {
+    if (!query) {
+        query = "?page=";
+    } else {
+        query += "&page=";
+    }
+
+    if (!step) step = 5;
     if (!collection.totalPages || collection.totalPages < 2) return '';
     var page = parseInt(collection.currentPage, 10);
     var pages = collection.totalPages;
@@ -39,14 +45,13 @@ function paginateHelper(collection,step) {
         html += '<li class="disabled"><span>&laquo;</span></li>';
         html += '<li class="disabled"><span>&lsaquo;</span></li>';
     } else {
-        html += '<li class="">' + this.link_to('&laquo;', '?page=1') + '</li>';
-        html += '<li class="">' + this.link_to('&lsaquo;', '?page=' + (page - 1)) + '</li>';
+        html += '<li class="">' + this.link_to('&laquo;', query + '1') + '</li>';
+        html += '<li class="">' + this.link_to('&lsaquo;', query + (page - 1)) + '</li>';
     }
 
     var start = page - step;
     var end = page + step;
 
-    console.log((step * 2 + 1), collection.totalPages, (step * 2 + 1) <= collection.totalPages);
     if ((step * 2 + 1) >= collection.totalPages) {
         start = 1;
         end = collection.totalPages;
@@ -66,7 +71,7 @@ function paginateHelper(collection,step) {
         if (i == page) {
             html += '<li class="active"><span>' + i + '</span></li>';
         } else {
-            html += '<li>' + this.link_to(i, '?page=' + i) + '</li>';
+            html += '<li>' + this.link_to(i, query + i) + '</li>';
         }
     }
 
@@ -74,8 +79,8 @@ function paginateHelper(collection,step) {
         html += '<li class="disabled"><span>&rsaquo;</span></li>';
         html += '<li class="disabled"><span>&raquo;</span></li>';
     } else {
-        html += '<li class="">' + this.link_to('&rsaquo;', '?page=' + (page + 1)) + '</li>';
-        html += '<li class="">' + this.link_to('&raquo;', '?page=' + pages) + '</li>';
+        html += '<li class="">' + this.link_to('&rsaquo;', query + (page + 1)) + '</li>';
+        html += '<li class="">' + this.link_to('&raquo;', query + pages) + '</li>';
     }
 
     html += '</ul></div>';
